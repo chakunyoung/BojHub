@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.*;
-import java.util.function.*;
 
 class Edge implements Comparable<Edge> {
     int u, v, w;
@@ -25,9 +24,10 @@ public class Main {
     }
 
     public static void union(int u, int v) {
-        u = find(u);
-        v = find(v);
-        if (u != v) parent[u] = v;
+    	if(u < v)
+    		parent[u] = v;
+    	else
+    		parent[v] = u;
     }
 
     public static void main(String[] args) throws IOException {
@@ -55,7 +55,7 @@ public class Main {
         while (!pq.isEmpty()) {
             Edge edge = pq.poll();
             if (find(edge.u) != find(edge.v)) {
-                union(edge.u, edge.v);
+                union(find(edge.u), find(edge.v));
                 mstWeight += edge.w;
             }
         }
