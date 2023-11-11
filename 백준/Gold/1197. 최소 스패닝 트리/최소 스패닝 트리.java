@@ -1,19 +1,6 @@
 import java.io.*;
 import java.util.*;
 
-class Edge implements Comparable<Edge> {
-    int u, v, w;
-    Edge(int u, int v, int w) {
-        this.u = u;
-        this.v = v;
-        this.w = w;
-    }
-
-    public int compareTo(Edge e) {
-        return this.w - e.w;
-    }
-}
-
 public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static int[] parent;
@@ -54,12 +41,29 @@ public class Main {
 
         while (!pq.isEmpty()) {
             Edge edge = pq.poll();
-            if (find(edge.u) != find(edge.v)) {
-                union(find(edge.u), find(edge.v));
+            
+            int eu = find(edge.u);
+            int uv = find(edge.v);
+            
+            if (eu != uv) {
+                union(eu, uv);
                 mstWeight += edge.w;
             }
         }
 
         System.out.println(mstWeight);
+    }
+    
+    static class Edge implements Comparable<Edge> {
+        int u, v, w;
+            Edge(int u, int v, int w) {
+                this.u = u;
+                this.v = v;
+                this.w = w;
+            }
+
+        public int compareTo(Edge e) {
+            return this.w - e.w;
+        }
     }
 }
