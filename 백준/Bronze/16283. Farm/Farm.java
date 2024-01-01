@@ -1,8 +1,7 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
@@ -10,21 +9,28 @@ public class Main {
 
 		st = new StringTokenizer(br.readLine());
 
-		int a = Integer.parseInt(st.nextToken());
-		int b = Integer.parseInt(st.nextToken());
-		int c = Integer.parseInt(st.nextToken());
-		int d = Integer.parseInt(st.nextToken());
+		int sheep = Integer.parseInt(st.nextToken());
+		int goat = Integer.parseInt(st.nextToken());
+		int total = Integer.parseInt(st.nextToken());
+		int w = Integer.parseInt(st.nextToken());
 
-		List<int[]> list = new ArrayList<>();
-		for (int i = 1; i < c; i++) {
-			int temp = a * i;
-			if (temp + b * (c - i) == d) {
-				list.add(new int[]{i, c-i});
+		int ansCount = 0;
+		int[] ans = new int[2];
+
+		for (int a = 1; a <= total - 1; a++) {
+			int b = total - a;
+			if ((a * sheep + b * goat) == w) {
+				++ansCount;
+				ans[0] = a;
+				ans[1] = b;
 			}
 		}
-		if(list.size() >= 2 || list.size() == 0)
-			System.out.println(-1);
-		else
-			System.out.println(list.get(0)[0] + " " + list.get(0)[1]);
+
+		if (ansCount > 1 || ansCount == 0) {
+			System.out.println("-1");
+		} else {
+			System.out.println(ans[0] + " " + ans[1]);
+		}
+
 	}
 }
