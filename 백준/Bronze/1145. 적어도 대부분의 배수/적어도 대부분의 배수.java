@@ -1,41 +1,31 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-
-
-	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
 		StringTokenizer st;
 
-		st = new StringTokenizer(br.readLine());
-		
 		int[] arr = new int[5];
-		
-		int idx = 0;
-		while(st.hasMoreTokens()) 
-			arr[idx ++ ] = Integer.parseInt(st.nextToken());
-		
-		int number = 0;
-		
-		loop:
-		for(int i =1; i< Integer.MAX_VALUE; i++) {
+		st = new StringTokenizer(br.readLine());
+
+		for (int i = 0; i < 5; i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
+
+		int min = 1;
+		while (true) {
 			int count = 0;
-			for(int j = 0; j<arr.length; j++) {
-				if(i % arr[j] == 0)
+			for (int number : arr) {
+				if (min % number == 0)
 					count++;
 			}
-			if(count >= 3) {
-				number = i;
-				break loop;
+			if (count >= 3) {
+				System.out.println(min);
+				break;
 			}
-				
+			min++;
 		}
-		
-		
-		System.out.println(number);
-		
-		
 	}
 }
