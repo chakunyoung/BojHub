@@ -1,28 +1,33 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		StringTokenizer st;
 
-		long w = Long.parseLong(br.readLine().trim());
-		long temp = w;
+		Long w = Long.parseLong(br.readLine());
 		
-		List<Long> list = new ArrayList<>();
-		for(long i = 2; i<=Math.sqrt(w); i++) {
-			if(temp % i == 0) {
-				list.add(i);
-				temp /= i;
-				i--;
-			}
+		List<Long> ans = new ArrayList<>();
+		
+		for (long f = 2; f * f <= w; f++) {
+            while (w % f == 0) {
+            	ans.add(f);
+                w /= f;
+            }
+        }
+        
+        if (w > 1) {
+        	ans.add(w);
+        }
+		
+		Collections.sort(ans);
+		
+		System.out.println(ans.size());
+		for(long a : ans) {
+			sb.append(a).append(" ");
 		}
-		if(temp != 1) list.add(temp);
-		
-		sb.append(list.size()).append("\n");
-		for(long n : list) sb.append(n).append(" ");
 		System.out.println(sb);
 	}
 }
