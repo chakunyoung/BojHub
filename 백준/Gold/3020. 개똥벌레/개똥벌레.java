@@ -10,35 +10,35 @@ public class Main {
 
 		st = new StringTokenizer(br.readLine());
 
-		int size = Integer.parseInt(st.nextToken());
-		int h = Integer.parseInt(st.nextToken());
+		int N = Integer.parseInt(st.nextToken());
+		int H = Integer.parseInt(st.nextToken());
+		int[] up = new int[H + 1];
+		int[] down = new int[H + 1];
 
-		int[] arr = new int[h + 1];
+		// 높이에 해당하는거 ++
+		for (int i = 0; i < N / 2; i++) {
+			down[Integer.parseInt(br.readLine())]++;
+			up[Integer.parseInt(br.readLine())]++;
+		}
 
-		for(int i = 0; i<size; i++){
-			int num = Integer.parseInt(br.readLine());
-			if( i % 2 == 0){
-				arr[0] += 1;
-				arr[num + 1] -= 1;
-			}else{
-				arr[h - num + 1] += 1;
-			}
+		for (int i = H - 1; i > 0; i--) {
+			up[i] += up[i + 1];
+			down[i] += down[i + 1];
 		}
 
 		int min = Integer.MAX_VALUE;
-		int[] prefix = new int[h+1];
-		prefix[0] = arr[0];
-		for(int i = 1; i<=h; i++){
-			prefix[i] = prefix[i-1] + arr[i];
-			min = Math.min(min, prefix[i]);
+		int count = 0;
+
+		for (int i = 1; i <= H; i++) {
+			int temp = up[i] + down[H - i + 1];
+			if (temp < min) {
+				min = temp;
+				count = 1;
+			} else if (temp == min) {
+				count++;
+			}
 		}
 
-		int count = 0;
-		for(int i = 1; i<=h; i++){
-			if(prefix[i] == min)
-				count++;
-		}
 		System.out.println(min + " " + count);
 	}
 }
-
