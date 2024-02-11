@@ -8,10 +8,8 @@ const temp = [];
 const s = "aeiou";
 
 let ans = "";
-recur(0, 0);
-console.log(ans);
 
-function recur(now, st) {
+const recur = (now, st) => {
   if (now == n) {
     let m = 0;
     let j = temp.length;
@@ -31,3 +29,6 @@ function recur(now, st) {
     recur(now + 1, i + 1);
   }
 }
+
+recur(0, 0);
+console.log(ans);
