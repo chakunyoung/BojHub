@@ -1,54 +1,38 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-class Main {
+public class Main {
 
-	static Node[] arr;
-	static int[] memo;
-	static int day;
+    static int[][] arr;
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
-		StringTokenizer st;
-		day = Integer.parseInt(br.readLine());
-		arr = new Node[day + 1];
-		memo = new int[day + 1];
-		Arrays.fill(memo, -1);
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        StringTokenizer st;
 
-		arr[day] = new Node(0, 0);
-		for (int i = 0; i < day; i++) {
-			st = new StringTokenizer(br.readLine());
-			int t = Integer.parseInt(st.nextToken());
-			int p = Integer.parseInt(st.nextToken());
-			arr[i] = new Node(t, p);
-		}
-		int ans = recur(0);
-		System.out.println(ans);
-	}
+        int size = Integer.parseInt(br.readLine());
+        arr = new int[size][2];
+        for (int i = 0; i < size; i++) {
+            st = new StringTokenizer(br.readLine());
+            arr[i][0] = Integer.parseInt(st.nextToken());
+            arr[i][1] = Integer.parseInt(st.nextToken());
+        }
 
-	public static int recur(int now) {
-		// 날짜를 넘어가면 못쓰게 하려고
-		if(now > day)
-			return -Integer.MAX_VALUE >> 1;
-			
-		if(now == day)
-			return 0;
-			
-		if(memo[now] != -1)
-			return memo[now];
-		
-		int max = 0;
-		max = Math.max(recur(now + 1), recur(now + arr[now].t) + arr[now].p);
-		return memo[now] = max;
-	}
+        System.out.println(recur(0, size, 0));
+    }
 
-	static class Node {
-		int t, p;
+    static int recur(int n, int size, int value) {
+        if (n > size)
+            return Integer.MIN_VALUE >> 1;
 
-		public Node(int t, int p) {
-			this.t = t;
-			this.p = p;
-		}
-	}
+        if (n == size) {
+            return value;
+        }
+
+        int day = arr[n][0];
+        int v = arr[n][1];
+
+        return Math.max(recur(n + day, size, value + v),
+                recur(n + 1, size, value));
+    }
 }
