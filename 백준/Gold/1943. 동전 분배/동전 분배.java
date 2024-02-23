@@ -29,7 +29,7 @@ public class Main {
 				total += coin[j].count * coin[j].v;
 			}
 
-			memo = new int[total + 1][n + 1];
+			memo = new int[(total) / 2 + 1][n + 1];
 
 			for (int[] a : memo)
 				Arrays.fill(a, -1);
@@ -47,12 +47,7 @@ public class Main {
 	}
 
 	static int recur(int idx, int v) {
-		if (f)
-			return 1;
-
 		if (v == total / 2) {
-			//System.out.println(v + " " + total / 2);
-
 			f = true;
 			return 1;
 		}
@@ -66,13 +61,16 @@ public class Main {
 
 		int res = 0;
 		for (int i = 0; i < coin.length; i++) {
+			if (f)
+				return 1;
+
 			if (coin[i].count > 0) {
 				coin[i].count--;
 				res += recur(i, v + coin[i].v);
 				coin[i].count++;
 			}
 		}
-		return memo[v][idx] = res > 0 ? 1 : 0;
+		return memo[v][idx] = res;
 	}
 
 	static class Coin {
