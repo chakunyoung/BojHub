@@ -1,75 +1,83 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringBuilder sb = new StringBuilder();
 
-    static int A;
-    static int B;
-    static Queue<Integer> q = new LinkedList<>();
-    static boolean[] visit;
-    static ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+	static StringBuilder sb = new StringBuilder();
+	static boolean[] v;
 
-    public static void main(String[] args) throws IOException {
-        //int N = Integer.parseInt(br.readLine());
-        StringTokenizer st; // = new StringTokenizer(br.readLine());
-        st = new StringTokenizer(br.readLine());
-        int A = Integer.parseInt(st.nextToken()); // 그래프 number
-        int B = Integer.parseInt(st.nextToken()); // 간선 number
-        int start = Integer.parseInt(st.nextToken());
-        visit = new boolean[A+1];
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
 
-        for(int i = 0; i<=A; i++){ // 0번은 사용 안함.
-            list.add(new ArrayList<Integer>()); //
-        }
+		st = new StringTokenizer(br.readLine());
 
-        StringTokenizer stt;
-        while(B-- >0){
-            stt = new StringTokenizer(br.readLine());
-            int startNumber = Integer.parseInt(stt.nextToken());
-            int arrive = Integer.parseInt(stt.nextToken());
-            list.get(startNumber).add(arrive);
-            list.get(arrive).add(startNumber);
-        }
-        for(int k = 0; k<list.size(); k++){
-            ArrayList<Integer> list1 = list.get(k);
-            Collections.sort(list1);
-        }
+		int node = Integer.parseInt(st.nextToken());
+		int line = Integer.parseInt(st.nextToken());
+		int s = Integer.parseInt(st.nextToken());
 
-        dfs(start);
-        Arrays.fill(visit, false);
-        System.out.println();
-        bfs(start);
+		v = new boolean[node];
 
+		List<List<Integer>> list = new ArrayList<>();
 
-    }public static void dfs(int start){
-        System.out.print(start + " ");
-        visit[start] = true;
-        ArrayList<Integer> l = list.get(start);
-        for(int i =0; i<l.size(); i++){
-            int number = l.get(i);
-            if(!visit[number])
-                dfs(number);
-        }
-    }
+		for (int i = 0; i < node; i++) {
+			list.add(new ArrayList<>());
+		}
 
-    public static void bfs(int start){
-        System.out.print(start + " ");
-        q.add(start);
-        visit[start] = true;
-        while(!q.isEmpty()){
-            int numberidx = q.poll();
-            for(int i = 0; i<list.get(numberidx).size(); i++){
-                int number = list.get(numberidx).get(i);
-                    if(!visit[number]){
-                    System.out.print(number+" ");
-                    q.add(number);
-                    visit[number] = true;
-                }
-            }
-        }
-    }
+		for (int i = 0; i < line; i++) {
+			st = new StringTokenizer(br.readLine());
+			int j = Integer.parseInt(st.nextToken());
+			int k = Integer.parseInt(st.nextToken());
+
+			List<Integer> innerList = list.get(j - 1);
+			innerList.add(k - 1);
+			innerList = list.get(k - 1);
+			innerList.add(j - 1);
+		}
+
+		for (int i = 0; i < list.size(); i++) {
+			List<Integer> innerList = list.get(i);
+			Collections.sort(innerList);
+		}
+
+		dfs(list, s - 1);
+		sb.append("\n");
+		Arrays.fill(v, false);
+		bfs(list, s - 1);
+		System.out.println(sb.toString());
+
+	}
+
+	static void dfs(List<List<Integer>> list, int node) {
+		v[node] = true;
+		sb.append(node + 1 + " ");
+		List<Integer> innerList = list.get(node);
+
+		for (int i = 0; i < innerList.size(); i++) {
+			int n = innerList.get(i);
+			if (!v[n]) {
+				dfs(list, n);
+			}
+		}
+	}
+
+	static void bfs(List<List<Integer>> list, int node) {
+		Queue<Integer> q = new LinkedList<>();
+		v[node] = true;
+		q.offer(node);
+
+		while (!q.isEmpty()) {
+			int n = q.poll();
+			sb.append(n + 1 + " ");
+			List<Integer> innerList = list.get(n);
+
+			for (int i = 0; i < innerList.size(); i++) {
+				int ele = innerList.get(i);
+				if (!v[ele]) {
+					v[ele] = true;
+					q.offer(ele);
+				}
+			}
+		}
+	}
 }
-
