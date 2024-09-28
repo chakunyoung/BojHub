@@ -27,15 +27,18 @@ public class Main {
 			int a = Integer.parseInt(st.nextToken());
 			int b = Integer.parseInt(st.nextToken());
 
-			int roota = find(a);
-			int rootb = find(b);
+			// root 찾기
+			int root1 = find(a);
+			int root2 = find(b);
 
-			if (roota != rootb) {
-				union(roota, rootb);
+			// root 들 경합
+			if (root1 != root2) {
+				union(root1, root2);
 			}
 
 		}
 
+		// 분리된 요소 count
 		int count = 0;
 		for (int i = 1; i < path.length; i++) {
 			if (!s.contains(find(path[i]))) {
@@ -44,7 +47,6 @@ public class Main {
 			}
 		}
 
-		//System.out.println(Arrays.toString(path));
 		System.out.println(count);
 	}
 
