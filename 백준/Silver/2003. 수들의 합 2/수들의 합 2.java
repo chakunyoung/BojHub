@@ -1,39 +1,46 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        StringTokenizer st;
 
-        st = new StringTokenizer(br.readLine());
-        int size = Integer.parseInt(st.nextToken());
-        long t = Long.parseLong(st.nextToken());
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
 
-        st = new StringTokenizer(br.readLine());
-        int[] arr = new int[size];
-        int idx = 0;
-        while (st.hasMoreTokens()) {
-            arr[idx++] = Integer.parseInt(st.nextToken());
-        }
+		st = new StringTokenizer(br.readLine());
 
-        int s = 0;
-        int e = 0;
-        long sum = 0L;
-        int ans = 0;
+		int size = Integer.parseInt(st.nextToken());
+		int t = Integer.parseInt(st.nextToken());
 
-        while (e != size) {
-            sum += arr[e];
-            while (sum > t && s < e) {
-                sum -= arr[s];
-                ++s;
-            }
-            if (sum == t) {
-                ++ans;
-            }
-            ++e;
-        }
-        System.out.println(ans);
-    }
+		st = new StringTokenizer(br.readLine());
+
+		int[] arr = new int[size];
+
+		int idx = 0;
+		while (st.hasMoreTokens()) {
+			arr[idx++] = Integer.parseInt(st.nextToken());
+		}
+
+		int s = 0;
+		int e = 0;
+
+		int sum = 0;
+		int ans = 0;
+
+		while (e <= size) {
+			if (sum == t) {
+				ans++;
+			}
+
+			if (sum >= t) {
+				sum -= arr[s++];
+			} else if (e < size) {
+				sum += arr[e++];
+			} else {
+				break;
+			}
+		}
+
+		System.out.println(ans);
+	}
 }
