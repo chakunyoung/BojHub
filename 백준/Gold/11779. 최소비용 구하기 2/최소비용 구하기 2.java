@@ -1,96 +1,99 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-	static int size;
+
 	static int[] dist;
-	static int[] track;
-	static List<List<Node>> list = new ArrayList<>();
-	static int count = 0;
+	static int[] arr;
+	static List<List<Edge>> list;
+	static List<Integer> f = new ArrayList<>();
 
-	static StringBuilder sb = new StringBuilder();
+	static StringBuilder sb1 = new StringBuilder();
+	static int count;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
 		StringTokenizer st;
 
-		size = Integer.parseInt(br.readLine()) + 1;
-		dist = new int[size];
-		track = new int[size];
-		Arrays.fill(dist, Integer.MAX_VALUE);
-		Arrays.fill(track, -1);
+		int city = Integer.parseInt(br.readLine());
+		int bus = Integer.parseInt(br.readLine());
+		dist = new int[city + 1];
+		arr = new int[city + 1];
 
-		int line = Integer.parseInt(br.readLine());
-
-		for (int i = 0; i < size; i++) {
+		list = new ArrayList<>();
+		for (int i = 0; i <= city; i++) {
 			list.add(new ArrayList<>());
 		}
 
-		for (int i = 0; i < line; i++) {
+		for (int i = 0; i < bus; i++) {
 			st = new StringTokenizer(br.readLine());
 			int s = Integer.parseInt(st.nextToken());
 			int e = Integer.parseInt(st.nextToken());
 			int w = Integer.parseInt(st.nextToken());
-
-			list.get(s).add(new Node(e, w));
+			list.get(s).add(new Edge(e, w));
 		}
 
 		st = new StringTokenizer(br.readLine());
-		int ss = Integer.parseInt(st.nextToken());
-		int ee = Integer.parseInt(st.nextToken());
-		dist[ss] = 0;
+		int s = Integer.parseInt(st.nextToken());
+		int e = Integer.parseInt(st.nextToken());
 
-		dijk(ss);
-		int min = dist[ee];
+		Arrays.fill(dist, Integer.MAX_VALUE >> 1);
+		dist[s] = 0; // !!
 
-		// System.out.println(Arrays.toString(track));
+		dijk(s);
+		recur(e);
 
-		System.out.println(min);
-		tracking(ee);
+		System.out.println(dist[e]);
 		System.out.println(count);
-		System.out.println(sb);
+
+		Collections.reverse(f);
+		for (int ele : f) {
+			sb1.append(ele).append(" ");
+		}
+		System.out.println(sb1.toString());
 
 	}
 
 	static void dijk(int s) {
-		PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> {
+		PriorityQueue<Edge> pq = new PriorityQueue<>((o1, o2) -> {
 			return o1.w - o2.w;
 		});
 
-		pq.offer(new Node(s, 0));
+		pq.offer(new Edge(s, 0));
 
 		while (!pq.isEmpty()) {
-			Node mid = pq.poll();
+			Edge edge = pq.poll();
 
-			if (mid.w > dist[mid.dest])
+			if (dist[edge.e] < edge.w)
 				continue;
 
-			List<Node> mids = list.get(mid.dest);
-
-			for (Node n : mids) {
-				int nw = dist[mid.dest] + n.w;
-				if (dist[mid.dest] + n.w < dist[n.dest]) {
-					dist[n.dest] = nw;
-					pq.offer(new Node(n.dest, nw));
-					track[n.dest] = mid.dest;
+			for (Edge e : list.get(edge.e)) {
+				if (dist[edge.e] + e.w < dist[e.e]) {
+					pq.offer(new Edge(e.e, dist[edge.e] + e.w));
+					dist[e.e] = dist[edge.e] + e.w; // !!
+					arr[e.e] = edge.e;
 				}
 			}
 		}
 	}
 
-	static void tracking(int node) {
-		if (track[node] != -1) {
-			tracking(track[node]);
-		}
-		++count;
-		sb.append(node).append(" ");
+	static void recur(int n) {
+		if (arr[n] == n)
+			return;
+
+		f.add(n);
+		count++;
+
+		recur(arr[n]);
 	}
 
-	static class Node {
-		int dest, w;
+	static class Edge {
+		int e;
+		int w;
 
-		public Node(int dest, int w) {
-			this.dest = dest;
+		Edge(int e, int w) {
+			this.e = e;
 			this.w = w;
 		}
 	}
