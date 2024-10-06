@@ -1,42 +1,38 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-class Main {
+public class Main {
 
-    static int[] temp;
-    static boolean[] v;
-    static StringBuilder sb = new StringBuilder();
+	static int n;
+	static int m;
+	static StringBuilder sb = new StringBuilder();
+	static int[] arr;
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        //StringBuilder sb = new StringBuilder();
-        StringTokenizer st;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		st = new StringTokenizer(br.readLine());
 
-        st = new StringTokenizer(br.readLine());
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
 
-        int number = Integer.parseInt(st.nextToken());
-        int n = Integer.parseInt(st.nextToken());
-        temp = new int[n];
-        v = new boolean[number + 1];
+		arr = new int[m];
+		recur(0, 1);
+		System.out.println(sb.toString());
 
-        recur(n, 0, number, 1);
-        System.out.println(sb.toString());
-    }
+	}
 
-    public static void recur(int limit, int n, int number , int t) {
-        if (n == limit) {
-            for (int ele : temp)
-                sb.append(ele).append(" ");
-            sb.append("\n");
-            return;
-        }
+	static void recur(int nn, int mm) {
+		if (nn == m) {
+			for (int ele : arr)
+				sb.append(ele).append(" ");
+			sb.append("\n");
+			return;
+		}
 
-        for (int i = t; i <= number; i++) {
-            if (v[i]) continue;
-            v[i] = true;
-            temp[n] = i;
-            recur(limit, n + 1, number, i + 1);
-            v[i] = false;
-        }
-    }
+		for (int i = mm; i <= n; i++) {
+			arr[nn] = i;
+			recur(nn + 1, i + 1);
+		}
+	}
 }
